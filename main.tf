@@ -10,13 +10,6 @@ resource "aws_route53_zone" "primary" {
   name = "beyonddevops.net"
 }
 
-resource "aws_route53_zone" "www" {
-	name = "www.beyonddevops.net"
-#	tags = {
-#		Environment = "dev"
-#	}
-}
-
 resource "aws_route53_record" "www" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = "www.beyonddevops.net"
@@ -31,9 +24,6 @@ resource "aws_route53_record" "www" {
 #		Environment = "dev"
 #	}
 }
-
-
-
 
 data "aws_acm_certificate" "acm_cert"   {
   domain   = "beyonddevops.net"
@@ -81,13 +71,6 @@ resource "aws_security_group" "instance" {
 resource "aws_security_group" "elb" {
 	name = "terraform-example-elb"
 
-	ingress {
-		from_port = 80
-		to_port = 80
-		protocol = "tcp"
-		cidr_blocks = ["0.0.0.0/0"]
-	}
-	
 	egress {
 		from_port = 0
 		to_port = 0
@@ -96,10 +79,32 @@ resource "aws_security_group" "elb" {
 	}
 }
 
+resource "aws_security_group_rule" "http" {
+	security_group_id = aws_security_group.elb.id 
+
+	type = "ingress"
+	from_port = 80 
+	to_port = 80 
+	protocol = "tcp" 
+	cidr_blocks = ["0.0.0.0/0"]
+}
+
+
+resource "aws_security_group_rule" "https" {
+	security_group_id = aws_security_group.elb.id 
+	
+	type = "ingress"
+	from_port = 443 
+	to_port = 443
+	protocol = "tcp" 
+	cidr_blocks = ["0.0.0.0/0"]
+}
+
 resource "aws_launch_configuration" "example" {
 	image_id	= "ami-006e2f9fa7597680a"
 	instance_type = "t2.micro"
-	security_groups = [ aws_security_group.instance.id ]
+	# security_groups = [ aws_security_group.instance.id ]
+	security_groups = [ aws_security_group.elb.id ]
 
 	# EC2 인스턴스의 user_data 설정을 통해 여러 줄의 스크립트 처리
 	# <<-EOF, EOF는 새로운 줄에 문자를 매번 추가하는 것이 아니라 
@@ -120,7 +125,7 @@ resource "aws_autoscaling_group" "example" {
 	availability_zones = [ data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2],  data.aws_availability_zones.available.names[3] ]	
 	# availability_zones = [ data.aws_availability_zones.available.names ]
 
-	load_balancers = [ aws_alb.example.name ]
+	# load_balancers = [ aws_alb.example.name ]
 	health_check_type = "ELB"
 
 	desired_capacity = 2
