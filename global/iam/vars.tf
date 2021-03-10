@@ -1,12 +1,16 @@
 variable "aws_region" {
   description = "AWS Region"
-  default     = "ap-northeast-2"
+  default     = "us-east-1"
 }
 
+#variable "vpc_id" {
+#  description = "Workspace VPC ID"
+#  # Name : crscube-tokyo-vpc
+#  default     = "vpc-053250658d267b1e2"
+#}
 
-variable "users" {
-	description = "Create IAM Users"
+variable "user_names" {
+	description = "Create IAM users with these names"
 	type = list
-
-	default = [ "terraform", "jhlim", "tjhwang", "espark", "dhlim" ]
+	default = ["jhlim", "tjhwang", "espark", "dhlim"]
 }
