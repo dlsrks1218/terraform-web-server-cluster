@@ -8,6 +8,6 @@
 ##	value = aws_
 ##}
 #
-#output "elb_dns_name" {
-#	value = aws_alb.example.dns_name
-#}
+output "elb_dns_name" {
+	value = aws_alb.example.dns_name
+}
