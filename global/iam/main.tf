@@ -15,15 +15,6 @@ resource "aws_iam_group_policy_attachment" "policy_attach" {
 # 	policy_arn = [ "arn:aws:iam::aws:policy/AmazonRDSFullAccess", "arn:aws:iam::aws:policy/AmazonEC2FullAccess", "arn:aws:iam::aws:policy/iamfullaccess", "arn:aws:iam::aws:policy/AmazonS3FullAccess", "arn:aws:iam::aws:policy/CloudWatchFullAccess", "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess", "arn:aws:iam::aws:policy/AmazonRoute53FullAccess", "arn:aws:iam::aws:policy/AWSCertificateManagerFullAccess"]
 
 	policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"
-#	policy_arn = "arn:aws:iam::aws:policy/AmazonIAMFullAccess"
-#	policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
-#	policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
-#	policy_arn = "arn:aws:iam::aws:policy/AmazonIAMFullAccess"
-#	policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-#	policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
-#	policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
-#	policy_arn = "arn:aws:iam::aws:policy/AmazonRoute53FullAccess"
-#	policy_arn = "arn:aws:iam::aws:policy/AmazonCertificateManagerFullAccess"
 }
 
 resource "aws_iam_user" "devops_user" {
@@ -43,5 +34,4 @@ resource "aws_iam_user_group_membership" "grp_mem" {
 	groups = [
 		aws_iam_group.devops.name
 	]
-#	policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }

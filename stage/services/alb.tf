@@ -1,3 +1,10 @@
+########################################
+
+############   Route 53   ##############
+
+########################################
+
+
 # 기존의 호스팅 영역을 사용하기 위해서
 # plan 전에 terraform import aws_route53_zone.primary <<기존의 zone id>> 로 임포트하기
 # terraform import aws_route53_zone.primary Z00229973JA10VRIVA0W
@@ -16,6 +23,13 @@ resource "aws_route53_record" "www" {
     evaluate_target_health = true
   }
 }
+
+
+########################################
+
+############  Security Group   #########
+
+########################################
 
 resource "aws_security_group" "alb" {
 	name = "terraform-example-elb"
@@ -48,6 +62,13 @@ resource "aws_security_group_rule" "https" {
 	protocol = "tcp" 
 	cidr_blocks = ["0.0.0.0/0"]
 }
+
+
+########################################
+
+###############   ALB  #################
+
+########################################
 
 resource "aws_alb" "example" {
   name            = "terraform-alb-example"

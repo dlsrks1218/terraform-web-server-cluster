@@ -1,17 +1,58 @@
+########################################
+
+############  Security Group   #########
+
+########################################
+
 resource "aws_security_group" "instance" {
 	name = "terraform-example-instance"
 
-	ingress {
-		from_port = 8080
-		to_port = 8080
-		protocol = "tcp"
+	egress {
+		from_port = 0
+		to_port = 0
+		protocol = "-1"
 		cidr_blocks = ["0.0.0.0/0"]
 	}
-	# 해당 인스턴스를 삭제하기 전에 새로운 인스턴스를 생성한다
-	lifecycle {
-		create_before_destroy = true
-	}
 }
+
+resource "aws_security_group_rule" "http_instance" {
+	security_group_id = aws_security_group.instance.id 
+
+	type = "ingress"
+	from_port = 80 
+	to_port = 80 
+	protocol = "tcp" 
+	cidr_blocks = ["0.0.0.0/0"]
+}
+
+
+resource "aws_security_group_rule" "https_instance" {
+	security_group_id = aws_security_group.instance.id 
+	
+	type = "ingress"
+	from_port = 443 
+	to_port = 443
+	protocol = "tcp" 
+	cidr_blocks = ["0.0.0.0/0"]
+}
+
+
+
+
+#resource "aws_security_group" "instance" {
+#	name = "terraform-example-instance"
+#
+#	ingress {
+#		from_port = 8080
+#		to_port = 8080
+#		protocol = "tcp"
+#		cidr_blocks = ["0.0.0.0/0"]
+#	}
+#	# 해당 인스턴스를 삭제하기 전에 새로운 인스턴스를 생성한다
+#	lifecycle {
+#		create_before_destroy = true
+#	}
+#}
 
 resource "aws_launch_configuration" "example" {
 	image_id	= "ami-006e2f9fa7597680a"
